@@ -6,7 +6,6 @@ import requests
 
 app = FastAPI()
 
-WEATHER_KEY = "c0ac662aee02eacdb5906a1230fa232d"
 NEWS_KEY = "c837dd010a294bf2a9fe203c253f1277"
 IPINFO_KEY = "57a24dfa9d053b"
 
@@ -57,11 +56,13 @@ button {
     cursor: pointer;
 }
 
+/* 🔥 Bigger Weather Panel */
 .panel {
     margin-top: 20px;
     padding: 20px;
     background: #102433;
     border-radius: 12px;
+    min-height: 550px;
 }
 </style>
 </head>
@@ -76,7 +77,7 @@ button {
 <button onclick="callAPI('/api/weather','Weather','weather')">Weather</button>
 <button onclick="callAPI('/api/news','News','news')">News</button>
 <button onclick="callAPI('/api/crypto','Crypto','crypto')">Crypto</button>
-<button onclick="callAPI('/api/location','Location','location')">Location</button>
+<!-- ❌ LOCATION REMOVED -->
 <button onclick="callAPI('/api/joke','Joke','joke')">Joke</button>
 
 <div id="responsePanel" class="panel">
@@ -96,14 +97,14 @@ function callAPI(url, label, tone){
 
     title.innerHTML = "<strong>" + label + "</strong> Response";
 
-    // 🔥 WEATHER → EMBED YOUR WEBSITE (ONLY CHANGE)
+    // 🌤️ WEATHER → BIG EMBED UI
     if(label === "Weather"){
         output.innerHTML = `
             <iframe 
                 src="https://web-api-projects-mri4.vercel.app/" 
                 style="
                     width:100%;
-                    height:500px;
+                    height:650px;
                     border:none;
                     border-radius:12px;
                 ">
@@ -182,19 +183,6 @@ def crypto():
         res = requests.get(url).json()
         track(start)
         return {"bitcoin_price": res["bitcoin"]["usd"]}
-    except Exception as e:
-        track(start, False)
-        return {"error": str(e)}
-
-
-@app.get("/api/location")
-def location():
-    start = time.time()
-    try:
-        url = f"https://ipinfo.io/json?token={IPINFO_KEY}"
-        res = requests.get(url).json()
-        track(start)
-        return {"city": res.get("city"), "country": res.get("country")}
     except Exception as e:
         track(start, False)
         return {"error": str(e)}
